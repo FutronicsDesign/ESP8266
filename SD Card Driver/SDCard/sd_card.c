@@ -807,7 +807,7 @@ FRESULT open_append (
 // processing loop to read commands from the console.
 //
 //*****************************************************************************
-int SD_Card_Save(char *filename,int noSCell, int noTemp, int Pack_V, int Pack_I, int Pack_Z, int Pack_T, int Cell_V[], int Cell_Z[], int Cell_T[])
+int SD_Card_Save(int noSCell, int noTemp, int Pack_V, int Pack_I, int Pack_Z, int Pack_T, int Cell_V[], int Cell_Z[], int Cell_T[])
 //int SD_Card_Save(int noSCell, int noTemp, int Pack_V)
 {
     //    FRESULT iFResult;

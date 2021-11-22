@@ -113,7 +113,19 @@ int vCell[noSCell], zCell[noSCell], tCell[noTemp];
 *   The user can use this function to implement the application.
 */
 int SD_Test(void);
-int SD_Card_Save(char *,int,int,int,int,int,int,int[],int[],int[]);
+
+
+/******* sd_card call *********/
+void SD_card(char *ptr)
+{
+int SD_Card_Save(int,int,int,int,int,int,int[],int[],int[]);
+}
+
+
+
+
+
+
 //int SD_Card_Save(int,int,int);
 /* USER CODE BEGIN (2) */
 // bframe one byte header then cell voltage, aux channel values, die temperature and vpack.
@@ -192,6 +204,8 @@ float calculateCellSOC(struct cell c[]){
     return (zTotal/noSCell);
 }
 
+
+
 /* USER CODE END */
 
 int main(void)
@@ -229,7 +243,8 @@ FRESULT iFResult;
       while(iFResult);
       for (i = 0; i < fileNum; ++i) {
           int ret  = snprintf(filename, 16, "Futro%03d.txt", i);
-          SD_Card_Save(filename,noSCell, noTemp, vPack*Factor, iPack*Factor, zAvg*Factor, TempPack*Factor, vCell, zCell, tCell);
+           SD_card(filename);
+       //   SD_Card_Save(filename,noSCell, noTemp, vPack*Factor, iPack*Factor, zAvg*Factor, TempPack*Factor, vCell, zCell, tCell);
           if (ret < 0 || ret >= 16) {
               fprintf(stderr, "snprintf: error at iteration %d: return value was %d\n", i, ret);
             }
@@ -255,10 +270,11 @@ FRESULT iFResult;
           vPack = getCellVoltage(c);
           TempPack = getCellTemp(c);
           zAvg = calculateCellSOC(c);
-          SD_Card_Save(filename,noSCell, noTemp, vPack*Factor, iPack*Factor, zAvg*Factor, TempPack*Factor, vCell, zCell, tCell);
+          SD_Card_Save(noSCell, noTemp, vPack*Factor, iPack*Factor, zAvg*Factor, TempPack*Factor, vCell, zCell, tCell);
 //          SD_Card_Save(noSCell, noTemp, vPack*100);
           UARTprintf("\n SD Card Access Done");
       }
+
 
 }
 
