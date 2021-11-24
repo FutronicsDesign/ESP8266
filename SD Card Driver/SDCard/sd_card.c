@@ -19,7 +19,8 @@
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
 //*****************************************************************************
-#define TEST_FILENAME    "Futr.TXT"
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
@@ -33,6 +34,10 @@
 #include "sd_defs.h"
 
 FATFS Fatfs;
+int i;
+long fileNum = 10000;  // maximum 99999
+void Increment();
+char filename[16];
 //*****************************************************************************
 //
 //! \addtogroup example_list
@@ -803,6 +808,19 @@ FRESULT open_append (
 
 //*****************************************************************************
 //
+// The program used for file increment every time file logs
+//
+//*****************************************************************************
+void Increment(){
+for (i = 0; i < fileNum; ++i) {
+    sprintf(filename,"Futro%u.txt",i);
+
+
+       //   SD_Card_Save(filename,noSCell, noTemp, vPack*Factor, iPack*Factor, zAvg*Factor, TempPack*Factor, vCell, zCell, tCell);}
+}
+}
+//*****************************************************************************
+//
 // The program main function.  It performs initialization, then runs a command
 // processing loop to read commands from the console.
 //
@@ -810,12 +828,13 @@ FRESULT open_append (
 int SD_Card_Save(int noSCell, int noTemp, int Pack_V, int Pack_I, int Pack_Z, int Pack_T, int Cell_V[], int Cell_Z[], int Cell_T[])
 //int SD_Card_Save(int noSCell, int noTemp, int Pack_V)
 {
-    //    FRESULT iFResult;
+    FRESULT iFResult;
     int a = 1.11;
     int i;
-    //
+
     // Mount the file system, using logical disk 0.
-   //  iFResult = f_mount(&g_sFatFs, "0:Futr.TXT", FS_FAT32);
+     iFResult = f_mount(&g_sFatFs,filename, FS_FAT32);
+     Increment();
    // iFResult = f_mount(0, &g_sFatFs);
    // iFResult = f_mount(&g_sFatFs, "", FS_FAT32);
 
@@ -829,8 +848,10 @@ int SD_Card_Save(int noSCell, int noTemp, int Pack_V, int Pack_I, int Pack_Z, in
     // write some info
     FIL fsrc;                /* File objects */
 
+
+
       /* Open  the file for append */
-      res = open_append(&fsrc, TEST_FILENAME);
+      res = open_append(&fsrc, filename);
       if (res != FR_OK) {
           /* Error. Cannot create the file */
           while(1);
@@ -895,6 +916,8 @@ int SD_Card_Save(int noSCell, int noTemp, int Pack_V, int Pack_I, int Pack_Z, in
 
 
 // Code from Sachin
+
+#if 0
 int
 SD_Test(void)
 {
@@ -902,7 +925,7 @@ SD_Test(void)
     FRESULT iFResult;
     //
     // Mount the file system, using logical disk 0.
-     iFResult = f_mount(&Fatfs,"Futr.txt", 3);
+     iFResult = f_mount(&Fatfs,"", 3);
    // iFResult = f_mount(0, &g_sFatFs);
     if(iFResult != FR_OK)
     {
@@ -994,7 +1017,9 @@ return(1);
 //                        StringFromFResult((FRESULT)nStatus));
 //        }
 //    }
-}
 
+
+}
+#endif
 
 

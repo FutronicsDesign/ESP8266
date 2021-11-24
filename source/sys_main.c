@@ -115,11 +115,10 @@ int vCell[noSCell], zCell[noSCell], tCell[noTemp];
 int SD_Test(void);
 
 
-/******* sd_card call *********/
-void SD_card(char *ptr)
-{
+/******* sd_card call functionality *********/
+
 int SD_Card_Save(int,int,int,int,int,int,int[],int[],int[]);
-}
+
 
 
 
@@ -210,11 +209,9 @@ float calculateCellSOC(struct cell c[]){
 
 int main(void)
 {
-int i;
-long fileNum = 10000;  // maximum 99999
-char filename[16];
+
 //UINT bw;
-FRESULT iFResult;
+
 
       gioInit();                              //Initializes the GPIO driver
       sciInit(); // To Initalize LIN/SCI2 routines to receive commands and transmit data
@@ -236,20 +233,7 @@ FRESULT iFResult;
       TempPack = getCellTemp(c);
       zAvg = getInitialSOC(c);
 //      SD_Test();
-      do
-      {
-          iFResult = f_mount(&g_sFatFs, "", FS_FAT32);
-      }
-      while(iFResult);
-      for (i = 0; i < fileNum; ++i) {
-          int ret  = snprintf(filename, 16, "Futro%03d.txt", i);
-           SD_card(filename);
-       //   SD_Card_Save(filename,noSCell, noTemp, vPack*Factor, iPack*Factor, zAvg*Factor, TempPack*Factor, vCell, zCell, tCell);
-          if (ret < 0 || ret >= 16) {
-              fprintf(stderr, "snprintf: error at iteration %d: return value was %d\n", i, ret);
-            }
-            exit(1);
-            }
+
 //      SD_Card_Save(noSCell, noTemp, vPack*100);
 
 //      f_mount(&Fatfs, "", 0);     /* Give a work area to the default drive */
