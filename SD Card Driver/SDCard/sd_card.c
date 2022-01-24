@@ -36,7 +36,6 @@
 FATFS Fatfs;
 int i;
 long fileNum = 10000;  // maximum 99999
-void Increment();
 char filename[16];
 //*****************************************************************************
 //
@@ -773,6 +772,7 @@ FRESULT open_append (
     const char* path    /* [IN]  File name to be opened */
 )
 {
+    UINT bw;
     FRESULT fr;
 
     /* Opens an existing file. If not exist, creates a new file. */
@@ -780,6 +780,7 @@ FRESULT open_append (
     if (fr == FR_OK) {
         /* Seek to end of the file to append data */
         fr = f_lseek(fp, f_size(fp));
+        f_write(fp,filename,16,bw);
         if (fr != FR_OK)
             f_close(fp);
     }
@@ -811,14 +812,28 @@ FRESULT open_append (
 // The program used for file increment every time file logs
 //
 //*****************************************************************************
-void Increment(){
-for (i = 0; i < fileNum; ++i) {
-    sprintf(filename,"Futro%u.txt",i);
+int Increment(char *path){
+    DIR dir;
+    FILINFO fno;
+    int i , index =-1;
 
+    if(f_opendir(&dir,path)==FR_OK)
+    {
+      while(1)
+      {
+          if(((f_readdir(&dir, &fno) != FR_OK) || (fno.fname[0] == 0)))
+              break;
+          if ((strstr(fno.fname, ".txt") != NULL) && (sscanf(fno.fname, "%d", &i) == 1))
+          if(i>index)
+          index =i ;
+      }
+    }
+
+    return (index+1);
 
        //   SD_Card_Save(filename,noSCell, noTemp, vPack*Factor, iPack*Factor, zAvg*Factor, TempPack*Factor, vCell, zCell, tCell);}
 }
-}
+
 //*****************************************************************************
 //
 // The program main function.  It performs initialization, then runs a command
@@ -834,7 +849,7 @@ int SD_Card_Save(int noSCell, int noTemp, int Pack_V, int Pack_I, int Pack_Z, in
 
     // Mount the file system, using logical disk 0.
      iFResult = f_mount(&g_sFatFs,filename, FS_FAT32);
-     Increment();
+
    // iFResult = f_mount(0, &g_sFatFs);
    // iFResult = f_mount(&g_sFatFs, "", FS_FAT32);
 
@@ -850,6 +865,9 @@ int SD_Card_Save(int noSCell, int noTemp, int Pack_V, int Pack_I, int Pack_Z, in
 
 
 
+
+      char filename[16];
+      sprintf(filename,"%03d.txt",Increment(""));
       /* Open  the file for append */
       res = open_append(&fsrc, filename);
       if (res != FR_OK) {
