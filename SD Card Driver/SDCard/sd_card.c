@@ -33,7 +33,6 @@
 #include "ffconf.h"
 #include "sd_defs.h"
 
-FATFS Fatfs;
 
 char filename[16];
 //*****************************************************************************
