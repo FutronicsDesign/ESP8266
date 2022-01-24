@@ -34,8 +34,7 @@
 #include "sd_defs.h"
 
 FATFS Fatfs;
-int i;
-long fileNum = 10000;  // maximum 99999
+
 char filename[16];
 //*****************************************************************************
 //
@@ -862,11 +861,8 @@ int SD_Card_Save(int noSCell, int noTemp, int Pack_V, int Pack_I, int Pack_Z, in
 
     // write some info
     FIL fsrc;                /* File objects */
+    char filename[16];
 
-
-
-
-      char filename[16];
       sprintf(filename,"%03d.txt",Increment(""));
       /* Open  the file for append */
       res = open_append(&fsrc, filename);
